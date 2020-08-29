@@ -1,0 +1,1029 @@
+{
+	"info": {
+		"_postman_id": "31d4e26c-db1d-4bb1-8142-bd2e2348cf74",
+		"name": "ProjectManager",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "TokenGeneration",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "666ae12e-427d-433a-8dd0-ec38bb649c74",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"tests[\"Body is NOT empty\"] = (responseBody!==null);\r",
+							"\r",
+							"var jsondata=JSON.parse(responseBody);\r",
+							"//let responseData=pm.response.json();\r",
+							"//pm.environment.set(\"ProjID\", responseData.id);\r",
+							"postman.setEnvironmentVariable(\"Token\", jsondata.access_token);\r",
+							"console.log(postman.setEnvironmentVariable(\"Token\", jsondata.access_token));"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "0cf7d362-6c31-476b-9ac8-b0057763ef52",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "fd43dcbc-07f9-445d-a110-1f600a0634a9",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "koVHs4yh9DaG1.cbD3tC1zL1.3-uB.j_~i",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "fd43dcbc-07f9-445d-a110-1f600a0634a9/Files.Read",
+							"type": "text"
+						},
+						{
+							"key": "userName",
+							"value": "Testuser1.Solaris@cytel.cloud",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "Xulu94632",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://login.microsoftonline.com/5043366b-6dbc-4ed5-97e9-a6a6e7d05ca0/oauth2/v2.0/token",
+					"protocol": "https",
+					"host": [
+						"login",
+						"microsoftonline",
+						"com"
+					],
+					"path": [
+						"5043366b-6dbc-4ed5-97e9-a6a6e7d05ca0",
+						"oauth2",
+						"v2.0",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Projects",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f565efe3-1a56-4d4c-b797-c6fd0d0d1852",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"tests[\"Body is NOT empty\"] = (responseBody!==null);\r",
+							"\r",
+							"var jsondata=JSON.parse(responseBody);\r",
+							"//let responseData=pm.response.json();\r",
+							"//pm.environment.set(\"ProjID\", responseData.id);\r",
+							"postman.setEnvironmentVariable(\"ProjID\", jsondata.id);\r",
+							"postman.setEnvironmentVariable(\"ProjID\", jsondata.resourceID);\r",
+							"console.log(postman.setEnvironmentVariable(\"ProjID\", jsondata.id));\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8dbcd359-2854-4203-a85a-5f10a292b458",
+						"exec": [
+							"/** const projname =Math.floor((Math.random() * 100) + 1);\r",
+							"pm.globals.set(\"projectName\",projname)\r",
+							"const protid =Math.floor((Math.random() * 100) + 1);\r",
+							"pm.globals.set(\"protocolID\",protid) */\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Token}}",
+						"type": "text"
+					},
+					{
+						"key": "cyt-api-key",
+						"value": "17f8e37f57304d05b55c9f39871e137c",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"projectName\": \"{{projectName}}\",\r\n    \"protocolID\": \"{{protocolID}}\",\r\n    \"programID\": 16,\r\n    \"indicationID\": 2,\r\n    \"phase\": 3,\r\n    \"timeUnitID\": 4,\r\n    \"currencyID\": 1,\r\n    \"createdBy\": \"Testuser1.Solaris@cytel.cloud\",\r\n    \"resourceID\": 1\r\n}"
+				},
+				"url": {
+					"raw": "https://{{url}}/api/v1.0/projects",
+					"protocol": "https",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"projects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IE-OBJECTIVE",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0e6d472a-21b4-4760-8956-67c8f81a5907",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"tests[\"Body is NOT empty\"] = (responseBody!==null);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "cyt-api-key",
+						"value": "17f8e37f57304d05b55c9f39871e137c ",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"object\": {\r\n        \"score\": {\r\n            \"error\": [\r\n                {\r\n                    \"field\": \"\",\r\n                    \"message\": \"\"\r\n                }\r\n            ],\r\n            \"power\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            },\r\n            \"sampleSize\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            },\r\n            \"studyDuration\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            },\r\n            \"numberofEvents\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            },\r\n            \"discountedStudyCost\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            }\r\n        },\r\n        \"design\": [\r\n            {}\r\n        ],\r\n        \"objective\": {\r\n            \"error\": [\r\n                {\r\n                    \"field\": \"\",\r\n                    \"message\": \"\"\r\n                },\r\n                {\r\n                    \"field\": \"controlArm\",\r\n                    \"message\": \"Control Arm is required\"\r\n                },\r\n                {\r\n                    \"field\": \"treatmentArm\",\r\n                    \"message\": \"Treatment Arm is required\"\r\n                },\r\n                {\r\n                    \"field\": \"populationName\",\r\n                    \"message\": \"Target Population is required\"\r\n                }\r\n            ],\r\n            \"endpoint\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"Name\": \"\",\r\n                    \"Type\": \"Time to Event\",\r\n                    \"error\": [\r\n                        {\r\n                            \"field\": \"\",\r\n                            \"message\": \"\"\r\n                        },\r\n                        {\r\n                            \"field\": \"Name\",\r\n                            \"message\": \"Name is required\"\r\n                        },\r\n                        {\r\n                            \"field\": \"Endpoint\",\r\n                            \"message\": \"Endpoint is required\"\r\n                        }\r\n                    ],\r\n                    \"Endpoint\": \"\",\r\n                    \"cardOrder\": 1\r\n                }\r\n            ],\r\n            \"controlArm\": \"\",\r\n            \"treatmentArm\": \"\",\r\n            \"populationName\": \"\"\r\n        },\r\n        \"validated\": true,\r\n        \"enrollment\": [\r\n            {\r\n                \"name\": \"\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"sites\": [\r\n                    {\r\n                        \"error\": [\r\n                            {\r\n                                \"field\": \"\",\r\n                                \"message\": \"\"\r\n                            }\r\n                        ],\r\n                        \"order\": 1,\r\n                        \"geography\": {\r\n                            \"id\": 1,\r\n                            \"value\": \"USA\"\r\n                        },\r\n                        \"enrollmentCap\": 100,\r\n                        \"siteInitiationTime\": 0,\r\n                        \"avgPatientsEnrolled\": 8\r\n                    }\r\n                ],\r\n                \"cardOrder\": 1,\r\n                \"inputMethod\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"Accrual Rate\"\r\n                },\r\n                \"distribution\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"Uniform\"\r\n                },\r\n                \"enrollmentId\": 1\r\n            }\r\n        ],\r\n        \"population\": [\r\n            {\r\n                \"name\": \"\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"cardOrder\": 1,\r\n                \"populationId\": 1,\r\n                \"endpointModel\": [\r\n                    {\r\n                        \"error\": [\r\n                            {\r\n                                \"field\": \"\",\r\n                                \"message\": \"\"\r\n                            }\r\n                        ],\r\n                        \"model\": {\r\n                            \"id\": 1,\r\n                            \"value\": \"Exponential\"\r\n                        },\r\n                        \"inputData\": [\r\n                            {\r\n                                \"byTime\": {\r\n                                    \"value\": \"\",\r\n                                    \"default\": \"1\"\r\n                                },\r\n                                \"control\": \"20\",\r\n                                \"treatment\": \"\",\r\n                                \"hazardRatio\": \"0.5\",\r\n                                \"startingAtTime\": {\r\n                                    \"value\": \"\",\r\n                                    \"default\": \"0\"\r\n                                }\r\n                            }\r\n                        ],\r\n                        \"endpointId\": 1,\r\n                        \"inputMethod\": {\r\n                            \"id\": 2,\r\n                            \"value\": \"Median Survival Time\"\r\n                        },\r\n                        \"numberOfPieces\": 1\r\n                    }\r\n                ],\r\n                \"dropoutRateModel\": {\r\n                    \"error\": [\r\n                        {\r\n                            \"field\": \"\",\r\n                            \"message\": \"\"\r\n                        }\r\n                    ],\r\n                    \"model\": {\r\n                        \"id\": 1,\r\n                        \"value\": \"Exponential\"\r\n                    },\r\n                    \"byTime\": 1,\r\n                    \"control\": \"0\",\r\n                    \"treatment\": \"0\",\r\n                    \"inputMethod\": {\r\n                        \"id\": 1,\r\n                        \"value\": \"Probability of Dropout\"\r\n                    },\r\n                    \"numberOfPieces\": 1\r\n                },\r\n                \"virtualPopulationSize\": 10000\r\n            }\r\n        ],\r\n        \"marketAccess\": [\r\n            {\r\n                \"name\": \"\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"cardOrder\": 1,\r\n                \"endpointId\": null,\r\n                \"discountRate\": 5,\r\n                \"marketAccessId\": 1,\r\n                \"timeToPatentExpiry\": 9.5,\r\n                \"regulatoryReviewPeriod\": 1,\r\n                \"annualRevenueInPeakYear\": 1000000,\r\n                \"timeToPeakAnnualRevenue\": 5,\r\n                \"proportionOfResidualSales\": 15,\r\n                \"anticipatedTreatmentEffect\": 0.6,\r\n                \"timeFromPatentExpirytoCloseOut\": 2\r\n            }\r\n        ],\r\n        \"operationalCost\": [\r\n            {\r\n                \"name\": \"\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"cardOrder\": 1,\r\n                \"operationalCostID\": null,\r\n                \"avgInvestigatorGrantPerPatient\": null\r\n            }\r\n        ],\r\n        \"simulationModels\": {\r\n            \"seed\": 0,\r\n            \"error\": [\r\n                {\r\n                    \"field\": \"\",\r\n                    \"message\": \"\"\r\n                }\r\n            ],\r\n            \"models\": [\r\n                {\r\n                    \"name\": \"\",\r\n                    \"error\": [\r\n                        {\r\n                            \"field\": \"\",\r\n                            \"message\": \"\"\r\n                        }\r\n                    ],\r\n                    \"design\": [\r\n                        {}\r\n                    ],\r\n                    \"modelId\": 1,\r\n                    \"enrollment\": [\r\n                        {\r\n                            \"name\": \"\",\r\n                            \"enrollmentId\": 1\r\n                        }\r\n                    ],\r\n                    \"population\": [\r\n                        {\r\n                            \"name\": \"\",\r\n                            \"populationId\": 1\r\n                        }\r\n                    ],\r\n                    \"marketAccess\": [\r\n                        {\r\n                            \"name\": \"\",\r\n                            \"marketAccessId\": 1\r\n                        }\r\n                    ],\r\n                    \"operationalCost\": [\r\n                        {\r\n                            \"name\": \"\",\r\n                            \"operationalCostID\": 1\r\n                        }\r\n                    ]\r\n                }\r\n            ],\r\n            \"numberOfSim\": 10000\r\n        }\r\n    },\r\n    \"createdBy\": \"Testuser1.Solaris@cytel.cloud\",\r\n    \"projectID\": {{ProjID}},\r\n    \"resourceID\": 1\r\n}"
+				},
+				"url": {
+					"raw": "https://{{url}}/api/v1.0/inputadvisor/'objective'",
+					"protocol": "https",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"inputadvisor",
+						"'objective'"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IE-POPULATION-SCENERIO",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0b26758e-b95a-40af-8abc-0e07b9929d57",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"tests[\"Body is NOT empty\"] = (responseBody!==null);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "cyt-api-key",
+						"value": "17f8e37f57304d05b55c9f39871e137c",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"object\": {\r\n        \"score\": {\r\n            \"error\": [\r\n                {\r\n                    \"field\": \"\",\r\n                    \"message\": \"\"\r\n                }\r\n            ],\r\n            \"power\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            },\r\n            \"sampleSize\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            },\r\n            \"studyDuration\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            },\r\n            \"numberofEvents\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            },\r\n            \"discountedStudyCost\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            }\r\n        },\r\n        \"design\": [\r\n            {}\r\n        ],\r\n        \"objective\": {\r\n            \"error\": [\r\n                {\r\n                    \"field\": \"\",\r\n                    \"message\": \"\"\r\n                }\r\n            ],\r\n            \"endpoint\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"Name\": \"Endpoint\",\r\n                    \"Type\": \"Time to Event\",\r\n                    \"error\": [\r\n                        {\r\n                            \"field\": \"\",\r\n                            \"message\": \"\"\r\n                        }\r\n                    ],\r\n                    \"Endpoint\": \"Overall Survival\",\r\n                    \"cardOrder\": 1,\r\n                    \"populationName\": \"Target Population\"\r\n                }\r\n            ],\r\n            \"controlArm\": \"Control\",\r\n            \"treatmentArm\": \"Arm\",\r\n            \"populationName\": \"Target Population\"\r\n        },\r\n        \"validated\": true,\r\n        \"enrollment\": [\r\n            {\r\n                \"name\": \"\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"sites\": [\r\n                    {\r\n                        \"error\": [\r\n                            {\r\n                                \"field\": \"\",\r\n                                \"message\": \"\"\r\n                            }\r\n                        ],\r\n                        \"order\": 1,\r\n                        \"geography\": {\r\n                            \"id\": 1,\r\n                            \"value\": \"USA\"\r\n                        },\r\n                        \"enrollmentCap\": 100,\r\n                        \"siteInitiationTime\": 0,\r\n                        \"avgPatientsEnrolled\": 8\r\n                    }\r\n                ],\r\n                \"cardOrder\": 1,\r\n                \"inputMethod\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"Accrual Rate\"\r\n                },\r\n                \"distribution\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"Uniform\"\r\n                },\r\n                \"enrollmentId\": 1\r\n            }\r\n        ],\r\n        \"population\": [\r\n            {\r\n                \"name\": \"Population Scenerio Name\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"cardOrder\": 1,\r\n                \"populationId\": 1,\r\n                \"endpointModel\": [\r\n                    {\r\n                        \"error\": [\r\n                            {\r\n                                \"field\": \"\",\r\n                                \"message\": \"\"\r\n                            }\r\n                        ],\r\n                        \"model\": {\r\n                            \"id\": 1,\r\n                            \"value\": \"Exponential\"\r\n                        },\r\n                        \"inputData\": [\r\n                            {\r\n                                \"byTime\": {\r\n                                    \"value\": \"1\",\r\n                                    \"default\": \"1\"\r\n                                },\r\n                                \"control\": \"20\",\r\n                                \"treatment\": \"\",\r\n                                \"hazardRatio\": \"0.5\",\r\n                                \"startingAtTime\": {\r\n                                    \"value\": \"\",\r\n                                    \"default\": \"0\"\r\n                                }\r\n                            }\r\n                        ],\r\n                        \"endpointId\": 1,\r\n                        \"inputMethod\": {\r\n                            \"id\": 3,\r\n                            \"value\": {\r\n                                \"id\": 3,\r\n                                \"value\": \"Cumulative % Survival\"\r\n                            }\r\n                        },\r\n                        \"numberOfPieces\": 1\r\n                    }\r\n                ],\r\n                \"dropoutRateModel\": {\r\n                    \"error\": [\r\n                        {\r\n                            \"field\": \"\",\r\n                            \"message\": \"\"\r\n                        }\r\n                    ],\r\n                    \"model\": {\r\n                        \"id\": 1,\r\n                        \"value\": \"Exponential\"\r\n                    },\r\n                    \"byTime\": 1,\r\n                    \"control\": \"0\",\r\n                    \"treatment\": \"0\",\r\n                    \"inputMethod\": {\r\n                        \"id\": 1,\r\n                        \"value\": \"Probability of Dropout\"\r\n                    },\r\n                    \"numberOfPieces\": 1\r\n                },\r\n                \"virtualPopulationSize\": \"10000\",\r\n                \"isExpanded\": true\r\n            }\r\n        ],\r\n        \"marketAccess\": [\r\n            {\r\n                \"name\": \"\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"cardOrder\": 1,\r\n                \"endpointId\": null,\r\n                \"discountRate\": 5,\r\n                \"marketAccessId\": 1,\r\n                \"timeToPatentExpiry\": 9.5,\r\n                \"regulatoryReviewPeriod\": 1,\r\n                \"annualRevenueInPeakYear\": 1000000,\r\n                \"timeToPeakAnnualRevenue\": 5,\r\n                \"proportionOfResidualSales\": 15,\r\n                \"anticipatedTreatmentEffect\": 0.6,\r\n                \"timeFromPatentExpirytoCloseOut\": 2\r\n            }\r\n        ],\r\n        \"operationalCost\": [\r\n            {\r\n                \"name\": \"\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"cardOrder\": 1,\r\n                \"operationalCostID\": null,\r\n                \"avgInvestigatorGrantPerPatient\": null\r\n            }\r\n        ],\r\n        \"simulationModels\": {\r\n            \"seed\": 0,\r\n            \"error\": [\r\n                {\r\n                    \"field\": \"\",\r\n                    \"message\": \"\"\r\n                }\r\n            ],\r\n            \"models\": [\r\n                {\r\n                    \"name\": \"\",\r\n                    \"error\": [\r\n                        {\r\n                            \"field\": \"\",\r\n                            \"message\": \"\"\r\n                        }\r\n                    ],\r\n                    \"design\": [\r\n                        {}\r\n                    ],\r\n                    \"modelId\": 1,\r\n                    \"enrollment\": [\r\n                        {\r\n                            \"name\": \"\",\r\n                            \"enrollmentId\": 1\r\n                        }\r\n                    ],\r\n                    \"population\": [\r\n                        {\r\n                            \"name\": \"\",\r\n                            \"populationId\": 1\r\n                        }\r\n                    ],\r\n                    \"marketAccess\": [\r\n                        {\r\n                            \"name\": \"\",\r\n                            \"marketAccessId\": 1\r\n                        }\r\n                    ],\r\n                    \"operationalCost\": [\r\n                        {\r\n                            \"name\": \"\",\r\n                            \"operationalCostID\": 1\r\n                        }\r\n                    ]\r\n                }\r\n            ],\r\n            \"numberOfSim\": 10000\r\n        }\r\n    },\r\n    \"createdBy\": \"Testuser1.Solaris@cytel.cloud\",\r\n    \"projectID\": {{ProjID}},\r\n    \"resourceID\": 1\r\n}"
+				},
+				"url": {
+					"raw": "https://{{url}}/api/v1.0/inputadvisor/'population-scenarios'",
+					"protocol": "https",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"inputadvisor",
+						"'population-scenarios'"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IE-ENROLLMENT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1764e906-f3f3-421e-8ded-91f0bf1e1527",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"tests[\"Body is NOT empty\"] = (responseBody!==null);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "cyt-api-key",
+						"value": "17f8e37f57304d05b55c9f39871e137c ",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"object\": {\r\n        \"score\": {\r\n            \"error\": [\r\n                {\r\n                    \"field\": \"\",\r\n                    \"message\": \"\"\r\n                }\r\n            ],\r\n            \"power\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            },\r\n            \"sampleSize\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            },\r\n            \"studyDuration\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            },\r\n            \"numberofEvents\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            },\r\n            \"discountedStudyCost\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            }\r\n        },\r\n        \"design\": [\r\n            {}\r\n        ],\r\n        \"objective\": {\r\n            \"error\": [\r\n                {\r\n                    \"field\": \"\",\r\n                    \"message\": \"\"\r\n                }\r\n            ],\r\n            \"endpoint\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"Name\": \"Endpoint\",\r\n                    \"Type\": \"Time to Event\",\r\n                    \"error\": [\r\n                        {\r\n                            \"field\": \"\",\r\n                            \"message\": \"\"\r\n                        }\r\n                    ],\r\n                    \"Endpoint\": \"Overall Survival\",\r\n                    \"cardOrder\": 1,\r\n                    \"populationName\": \"Target Population\"\r\n                }\r\n            ],\r\n            \"controlArm\": \"Control\",\r\n            \"treatmentArm\": \"Arm\",\r\n            \"populationName\": \"Target Population\"\r\n        },\r\n        \"validated\": true,\r\n        \"enrollment\": [\r\n            {\r\n                \"name\": \"EnrollMent Name\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"sites\": [\r\n                    {\r\n                        \"error\": [\r\n                            {\r\n                                \"field\": \"\",\r\n                                \"message\": \"\"\r\n                            }\r\n                        ],\r\n                        \"order\": 1,\r\n                        \"geography\": {\r\n                            \"id\": 3,\r\n                            \"value\": \"Mexico\"\r\n                        },\r\n                        \"enrollmentCap\": 100,\r\n                        \"siteInitiationTime\": 0,\r\n                        \"avgPatientsEnrolled\": \"9149\"\r\n                    }\r\n                ],\r\n                \"cardOrder\": 1,\r\n                \"inputMethod\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"Accrual Rate\"\r\n                },\r\n                \"distribution\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"Uniform\"\r\n                },\r\n                \"enrollmentId\": 1\r\n            }\r\n        ],\r\n        \"population\": [\r\n            {\r\n                \"name\": \"Population Scenerio Name\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"cardOrder\": 1,\r\n                \"isExpanded\": true,\r\n                \"populationId\": 1,\r\n                \"endpointModel\": [\r\n                    {\r\n                        \"error\": [\r\n                            {\r\n                                \"field\": \"\",\r\n                                \"message\": \"\"\r\n                            }\r\n                        ],\r\n                        \"model\": {\r\n                            \"id\": 1,\r\n                            \"value\": \"Exponential\"\r\n                        },\r\n                        \"inputData\": [\r\n                            {\r\n                                \"byTime\": {\r\n                                    \"value\": \"1\",\r\n                                    \"default\": \"1\"\r\n                                },\r\n                                \"control\": \"20\",\r\n                                \"treatment\": \"\",\r\n                                \"hazardRatio\": \"0.5\",\r\n                                \"startingAtTime\": {\r\n                                    \"value\": \"\",\r\n                                    \"default\": \"0\"\r\n                                }\r\n                            }\r\n                        ],\r\n                        \"endpointId\": 1,\r\n                        \"inputMethod\": {\r\n                            \"id\": 3,\r\n                            \"value\": {\r\n                                \"id\": 3,\r\n                                \"value\": \"Cumulative % Survival\"\r\n                            }\r\n                        },\r\n                        \"numberOfPieces\": 1\r\n                    }\r\n                ],\r\n                \"dropoutRateModel\": {\r\n                    \"error\": [\r\n                        {\r\n                            \"field\": \"\",\r\n                            \"message\": \"\"\r\n                        }\r\n                    ],\r\n                    \"model\": {\r\n                        \"id\": 1,\r\n                        \"value\": \"Exponential\"\r\n                    },\r\n                    \"byTime\": 1,\r\n                    \"control\": \"0\",\r\n                    \"treatment\": \"0\",\r\n                    \"inputMethod\": {\r\n                        \"id\": 1,\r\n                        \"value\": \"Probability of Dropout\"\r\n                    },\r\n                    \"numberOfPieces\": 1\r\n                },\r\n                \"virtualPopulationSize\": \"10000\"\r\n            }\r\n        ],\r\n        \"marketAccess\": [\r\n            {\r\n                \"name\": \"\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"cardOrder\": 1,\r\n                \"endpointId\": null,\r\n                \"discountRate\": 5,\r\n                \"marketAccessId\": 1,\r\n                \"timeToPatentExpiry\": 9.5,\r\n                \"regulatoryReviewPeriod\": 1,\r\n                \"annualRevenueInPeakYear\": 1000000,\r\n                \"timeToPeakAnnualRevenue\": 5,\r\n                \"proportionOfResidualSales\": 15,\r\n                \"anticipatedTreatmentEffect\": 0.6,\r\n                \"timeFromPatentExpirytoCloseOut\": 2\r\n            }\r\n        ],\r\n        \"operationalCost\": [\r\n            {\r\n                \"name\": \"\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"cardOrder\": 1,\r\n                \"operationalCostID\": null,\r\n                \"avgInvestigatorGrantPerPatient\": null\r\n            }\r\n        ],\r\n        \"simulationModels\": {\r\n            \"seed\": 0,\r\n            \"error\": [\r\n                {\r\n                    \"field\": \"\",\r\n                    \"message\": \"\"\r\n                }\r\n            ],\r\n            \"models\": [\r\n                {\r\n                    \"name\": \"\",\r\n                    \"error\": [\r\n                        {\r\n                            \"field\": \"\",\r\n                            \"message\": \"\"\r\n                        }\r\n                    ],\r\n                    \"design\": [\r\n                        {}\r\n                    ],\r\n                    \"modelId\": 1,\r\n                    \"enrollment\": [\r\n                        {\r\n                            \"name\": \"\",\r\n                            \"enrollmentId\": 1\r\n                        }\r\n                    ],\r\n                    \"population\": [\r\n                        {\r\n                            \"name\": \"\",\r\n                            \"populationId\": 1\r\n                        }\r\n                    ],\r\n                    \"marketAccess\": [\r\n                        {\r\n                            \"name\": \"\",\r\n                            \"marketAccessId\": 1\r\n                        }\r\n                    ],\r\n                    \"operationalCost\": [\r\n                        {\r\n                            \"name\": \"\",\r\n                            \"operationalCostID\": 1\r\n                        }\r\n                    ]\r\n                }\r\n            ],\r\n            \"numberOfSim\": 10000\r\n        }\r\n    },\r\n    \"createdBy\": \"Testuser1.Solaris@cytel.cloud\",\r\n    \"projectID\": {{ProjID}},\r\n    \"resourceID\": 1\r\n}"
+				},
+				"url": {
+					"raw": "https://{{url}}/api/v1.0/inputadvisor/'enrollment-scenarios'",
+					"protocol": "https",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"inputadvisor",
+						"'enrollment-scenarios'"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IE - DESIGN",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a9500709-ec47-41cb-b175-8c1d5ba4144c",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"tests[\"Body is NOT empty\"] = (responseBody!==null);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "cyt-api-key",
+						"value": "17f8e37f57304d05b55c9f39871e137c ",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"object\": {\r\n        \"score\": {\r\n            \"error\": [\r\n                {\r\n                    \"field\": \"\",\r\n                    \"message\": \"\"\r\n                }\r\n            ],\r\n            \"power\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            },\r\n            \"sampleSize\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            },\r\n            \"studyDuration\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            },\r\n            \"numberofEvents\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            },\r\n            \"discountedStudyCost\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            }\r\n        },\r\n        \"design\": [\r\n            {\r\n                \"allocationRatio\": \"1\",\r\n                \"criticalPoint\": \"\",\r\n                \"designId\": 0,\r\n                \"designKey\": \"\",\r\n                \"endpointId\": 1,\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"hypothesis\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"Superiority\"\r\n                },\r\n                \"name\": \"Design\",\r\n                \"nonInfMargin\": \"0.223\",\r\n                \"numberOfArms\": 2,\r\n                \"numberOfEvents\": \"88\",\r\n                \"regulatoryRiskAssessment\": {\r\n                    \"id\": null,\r\n                    \"value\": \"\"\r\n                },\r\n                \"sampleSize\": \"182\",\r\n                \"statisticalDesign\": {\r\n                    \"id\": 2,\r\n                    \"value\": \"Group Sequential\",\r\n                    \"version\": \"1.0.0\"\r\n                },\r\n                \"subjectsAreFollowedPeriod\": \"1\",\r\n                \"subjectsAreFollowedType\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"Until End of Study\"\r\n                },\r\n                \"tailType\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"Left Tail\"\r\n                },\r\n                \"testStatistics\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"Logrank\"\r\n                },\r\n                \"testType\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"1-sided\"\r\n                },\r\n                \"type1Error\": \"0.025\",\r\n                \"efficacy\": {\r\n                    \"boundaryFamily\": {\r\n                        \"id\": 1,\r\n                        \"value\": \"Spending Functions\"\r\n                    },\r\n                    \"spendingFunction\": {\r\n                        \"id\": 1,\r\n                        \"value\": \"Lan-DeMets\"\r\n                    },\r\n                    \"parameter\": \"OF\"\r\n                },\r\n                \"numberOfInterimAnalysis\": \"1\",\r\n                \"interimAnalysesSpacing\": [\r\n                    \"50\"\r\n                ]\r\n            }\r\n        ],\r\n        \"objective\": {\r\n            \"error\": [\r\n                {\r\n                    \"field\": \"\",\r\n                    \"message\": \"\"\r\n                }\r\n            ],\r\n            \"endpoint\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"Name\": \"Endpoint\",\r\n                    \"Type\": \"Time to Event\",\r\n                    \"error\": [\r\n                        {\r\n                            \"field\": \"\",\r\n                            \"message\": \"\"\r\n                        }\r\n                    ],\r\n                    \"Endpoint\": \"Overall Survival\",\r\n                    \"cardOrder\": 1,\r\n                    \"populationName\": \"Target Population\"\r\n                }\r\n            ],\r\n            \"controlArm\": \"Control\",\r\n            \"treatmentArm\": \"Arm\",\r\n            \"populationName\": \"Target Population\"\r\n        },\r\n        \"validated\": true,\r\n        \"enrollment\": [\r\n            {\r\n                \"name\": \"EnrollMent Name\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"sites\": [\r\n                    {\r\n                        \"error\": [\r\n                            {\r\n                                \"field\": \"\",\r\n                                \"message\": \"\"\r\n                            }\r\n                        ],\r\n                        \"order\": 1,\r\n                        \"geography\": {\r\n                            \"id\": 3,\r\n                            \"value\": \"Mexico\"\r\n                        },\r\n                        \"enrollmentCap\": 100,\r\n                        \"siteInitiationTime\": 0,\r\n                        \"avgPatientsEnrolled\": \"9149\"\r\n                    }\r\n                ],\r\n                \"cardOrder\": 1,\r\n                \"inputMethod\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"Accrual Rate\"\r\n                },\r\n                \"distribution\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"Uniform\"\r\n                },\r\n                \"enrollmentId\": 1\r\n            }\r\n        ],\r\n        \"population\": [\r\n            {\r\n                \"name\": \"Population Scenerio Name\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"cardOrder\": 1,\r\n                \"isExpanded\": true,\r\n                \"populationId\": 1,\r\n                \"endpointModel\": [\r\n                    {\r\n                        \"error\": [\r\n                            {\r\n                                \"field\": \"\",\r\n                                \"message\": \"\"\r\n                            }\r\n                        ],\r\n                        \"model\": {\r\n                            \"id\": 1,\r\n                            \"value\": \"Exponential\"\r\n                        },\r\n                        \"inputData\": [\r\n                            {\r\n                                \"byTime\": {\r\n                                    \"value\": \"1\",\r\n                                    \"default\": \"1\"\r\n                                },\r\n                                \"control\": \"20\",\r\n                                \"treatment\": \"\",\r\n                                \"hazardRatio\": \"0.5\",\r\n                                \"startingAtTime\": {\r\n                                    \"value\": \"\",\r\n                                    \"default\": \"0\"\r\n                                }\r\n                            }\r\n                        ],\r\n                        \"endpointId\": 1,\r\n                        \"inputMethod\": {\r\n                            \"id\": 3,\r\n                            \"value\": {\r\n                                \"id\": 3,\r\n                                \"value\": \"Cumulative % Survival\"\r\n                            }\r\n                        },\r\n                        \"numberOfPieces\": 1\r\n                    }\r\n                ],\r\n                \"dropoutRateModel\": {\r\n                    \"error\": [\r\n                        {\r\n                            \"field\": \"\",\r\n                            \"message\": \"\"\r\n                        }\r\n                    ],\r\n                    \"model\": {\r\n                        \"id\": 1,\r\n                        \"value\": \"Exponential\"\r\n                    },\r\n                    \"byTime\": 1,\r\n                    \"control\": \"0\",\r\n                    \"treatment\": \"0\",\r\n                    \"inputMethod\": {\r\n                        \"id\": 1,\r\n                        \"value\": \"Probability of Dropout\"\r\n                    },\r\n                    \"numberOfPieces\": 1\r\n                },\r\n                \"virtualPopulationSize\": \"10000\"\r\n            }\r\n        ],\r\n        \"marketAccess\": [\r\n            {\r\n                \"name\": \"\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"cardOrder\": 1,\r\n                \"endpointId\": null,\r\n                \"discountRate\": 5,\r\n                \"marketAccessId\": 1,\r\n                \"timeToPatentExpiry\": 9.5,\r\n                \"regulatoryReviewPeriod\": 1,\r\n                \"annualRevenueInPeakYear\": 1000000,\r\n                \"timeToPeakAnnualRevenue\": 5,\r\n                \"proportionOfResidualSales\": 15,\r\n                \"anticipatedTreatmentEffect\": 0.6,\r\n                \"timeFromPatentExpirytoCloseOut\": 2\r\n            }\r\n        ],\r\n        \"operationalCost\": [\r\n            {\r\n                \"name\": \"\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"cardOrder\": 1,\r\n                \"operationalCostID\": null,\r\n                \"avgInvestigatorGrantPerPatient\": null\r\n            }\r\n        ],\r\n        \"simulationModels\": {\r\n            \"seed\": 0,\r\n            \"error\": [\r\n                {\r\n                    \"field\": \"\",\r\n                    \"message\": \"\"\r\n                }\r\n            ],\r\n            \"models\": [\r\n                {\r\n                    \"name\": \"\",\r\n                    \"error\": [\r\n                        {\r\n                            \"field\": \"\",\r\n                            \"message\": \"\"\r\n                        }\r\n                    ],\r\n                    \"design\": [\r\n                        {}\r\n                    ],\r\n                    \"modelId\": 1,\r\n                    \"enrollment\": [\r\n                        {\r\n                            \"name\": \"\",\r\n                            \"enrollmentId\": 1\r\n                        }\r\n                    ],\r\n                    \"population\": [\r\n                        {\r\n                            \"name\": \"\",\r\n                            \"populationId\": 1\r\n                        }\r\n                    ],\r\n                    \"marketAccess\": [\r\n                        {\r\n                            \"name\": \"\",\r\n                            \"marketAccessId\": 1\r\n                        }\r\n                    ],\r\n                    \"operationalCost\": [\r\n                        {\r\n                            \"name\": \"\",\r\n                            \"operationalCostID\": 1\r\n                        }\r\n                    ]\r\n                }\r\n            ],\r\n            \"numberOfSim\": 10000\r\n        }\r\n    },\r\n    \"createdBy\": \"Testuser1.Solaris@cytel.cloud\",\r\n    \"projectID\": {{ProjID}},\r\n    \"resourceID\": 1\r\n}"
+				},
+				"url": {
+					"raw": "https://{{url}}/api/v1.0/inputadvisor/'designs'",
+					"protocol": "https",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"inputadvisor",
+						"'designs'"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IE-MARKET",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8cdaa864-6287-40d7-aa70-b20195c8c077",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"tests[\"Body is NOT empty\"] = (responseBody!==null);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "cyt-api-key",
+						"value": "17f8e37f57304d05b55c9f39871e137c ",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"object\": {\r\n        \"score\": {\r\n            \"error\": [\r\n                {\r\n                    \"field\": \"\",\r\n                    \"message\": \"\"\r\n                }\r\n            ],\r\n            \"power\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            },\r\n            \"sampleSize\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            },\r\n            \"studyDuration\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            },\r\n            \"numberofEvents\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            },\r\n            \"discountedStudyCost\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            }\r\n        },\r\n        \"design\": [\r\n            {\r\n                \"name\": \"Design\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"designId\": 0,\r\n                \"efficacy\": {\r\n                    \"parameter\": \"OF\",\r\n                    \"boundaryFamily\": {\r\n                        \"id\": 1,\r\n                        \"value\": \"Spending Functions\"\r\n                    },\r\n                    \"spendingFunction\": {\r\n                        \"id\": 1,\r\n                        \"value\": \"Lan-DeMets\"\r\n                    }\r\n                },\r\n                \"tailType\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"Left Tail\"\r\n                },\r\n                \"testType\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"1-sided\"\r\n                },\r\n                \"designKey\": \"\",\r\n                \"endpointId\": 1,\r\n                \"hypothesis\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"Superiority\"\r\n                },\r\n                \"sampleSize\": \"182\",\r\n                \"type1Error\": \"0.025\",\r\n                \"nonInfMargin\": \"0.223\",\r\n                \"numberOfArms\": 2,\r\n                \"criticalPoint\": \"\",\r\n                \"numberOfEvents\": \"88\",\r\n                \"testStatistics\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"Logrank\"\r\n                },\r\n                \"allocationRatio\": \"1\",\r\n                \"statisticalDesign\": {\r\n                    \"id\": 2,\r\n                    \"value\": \"Group Sequential\",\r\n                    \"version\": \"1.0.0\"\r\n                },\r\n                \"interimAnalysesSpacing\": [\r\n                    \"50\"\r\n                ],\r\n                \"numberOfInterimAnalysis\": \"1\",\r\n                \"subjectsAreFollowedType\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"Until End of Study\"\r\n                },\r\n                \"regulatoryRiskAssessment\": {\r\n                    \"id\": null,\r\n                    \"value\": \"\"\r\n                },\r\n                \"subjectsAreFollowedPeriod\": \"1\"\r\n            }\r\n        ],\r\n        \"objective\": {\r\n            \"error\": [\r\n                {\r\n                    \"field\": \"\",\r\n                    \"message\": \"\"\r\n                }\r\n            ],\r\n            \"endpoint\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"Name\": \"Endpoint\",\r\n                    \"Type\": \"Time to Event\",\r\n                    \"error\": [\r\n                        {\r\n                            \"field\": \"\",\r\n                            \"message\": \"\"\r\n                        }\r\n                    ],\r\n                    \"Endpoint\": \"Overall Survival\",\r\n                    \"cardOrder\": 1,\r\n                    \"populationName\": \"Target Population\"\r\n                }\r\n            ],\r\n            \"controlArm\": \"Control\",\r\n            \"treatmentArm\": \"Arm\",\r\n            \"populationName\": \"Target Population\"\r\n        },\r\n        \"validated\": true,\r\n        \"enrollment\": [\r\n            {\r\n                \"name\": \"EnrollMent Name\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"sites\": [\r\n                    {\r\n                        \"error\": [\r\n                            {\r\n                                \"field\": \"\",\r\n                                \"message\": \"\"\r\n                            }\r\n                        ],\r\n                        \"order\": 1,\r\n                        \"geography\": {\r\n                            \"id\": 3,\r\n                            \"value\": \"Mexico\"\r\n                        },\r\n                        \"enrollmentCap\": 100,\r\n                        \"siteInitiationTime\": 0,\r\n                        \"avgPatientsEnrolled\": \"9149\"\r\n                    }\r\n                ],\r\n                \"cardOrder\": 1,\r\n                \"inputMethod\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"Accrual Rate\"\r\n                },\r\n                \"distribution\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"Uniform\"\r\n                },\r\n                \"enrollmentId\": 1\r\n            }\r\n        ],\r\n        \"population\": [\r\n            {\r\n                \"name\": \"Population Scenerio Name\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"cardOrder\": 1,\r\n                \"isExpanded\": true,\r\n                \"populationId\": 1,\r\n                \"endpointModel\": [\r\n                    {\r\n                        \"error\": [\r\n                            {\r\n                                \"field\": \"\",\r\n                                \"message\": \"\"\r\n                            }\r\n                        ],\r\n                        \"model\": {\r\n                            \"id\": 1,\r\n                            \"value\": \"Exponential\"\r\n                        },\r\n                        \"inputData\": [\r\n                            {\r\n                                \"byTime\": {\r\n                                    \"value\": \"1\",\r\n                                    \"default\": \"1\"\r\n                                },\r\n                                \"control\": \"20\",\r\n                                \"treatment\": \"\",\r\n                                \"hazardRatio\": \"0.5\",\r\n                                \"startingAtTime\": {\r\n                                    \"value\": \"\",\r\n                                    \"default\": \"0\"\r\n                                }\r\n                            }\r\n                        ],\r\n                        \"endpointId\": 1,\r\n                        \"inputMethod\": {\r\n                            \"id\": 3,\r\n                            \"value\": {\r\n                                \"id\": 3,\r\n                                \"value\": \"Cumulative % Survival\"\r\n                            }\r\n                        },\r\n                        \"numberOfPieces\": 1\r\n                    }\r\n                ],\r\n                \"dropoutRateModel\": {\r\n                    \"error\": [\r\n                        {\r\n                            \"field\": \"\",\r\n                            \"message\": \"\"\r\n                        }\r\n                    ],\r\n                    \"model\": {\r\n                        \"id\": 1,\r\n                        \"value\": \"Exponential\"\r\n                    },\r\n                    \"byTime\": 1,\r\n                    \"control\": \"0\",\r\n                    \"treatment\": \"0\",\r\n                    \"inputMethod\": {\r\n                        \"id\": 1,\r\n                        \"value\": \"Probability of Dropout\"\r\n                    },\r\n                    \"numberOfPieces\": 1\r\n                },\r\n                \"virtualPopulationSize\": \"10000\"\r\n            }\r\n        ],\r\n        \"marketAccess\": [\r\n            {\r\n                \"name\": \"Market Access\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"cardOrder\": 1,\r\n                \"endpointId\": 1,\r\n                \"discountRate\": 5,\r\n                \"marketAccessId\": 1,\r\n                \"timeToPatentExpiry\": 9.5,\r\n                \"regulatoryReviewPeriod\": 1,\r\n                \"annualRevenueInPeakYear\": \"1000000\",\r\n                \"timeToPeakAnnualRevenue\": 5,\r\n                \"proportionOfResidualSales\": 15,\r\n                \"anticipatedTreatmentEffect\": 0.6,\r\n                \"timeFromPatentExpirytoCloseOut\": 2\r\n            }\r\n        ],\r\n        \"operationalCost\": [\r\n            {\r\n                \"name\": \"Operation Model Name\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"cardOrder\": 1,\r\n                \"operationalCostID\": null,\r\n                \"avgInvestigatorGrantPerPatient\": \"4545487\"\r\n            }\r\n        ],\r\n        \"simulationModels\": {\r\n            \"seed\": 0,\r\n            \"error\": [\r\n                {\r\n                    \"field\": \"\",\r\n                    \"message\": \"\"\r\n                }\r\n            ],\r\n            \"models\": [\r\n                {\r\n                    \"name\": \"\",\r\n                    \"error\": [\r\n                        {\r\n                            \"field\": \"\",\r\n                            \"message\": \"\"\r\n                        }\r\n                    ],\r\n                    \"design\": [\r\n                        {}\r\n                    ],\r\n                    \"modelId\": 1,\r\n                    \"enrollment\": [\r\n                        {\r\n                            \"name\": \"\",\r\n                            \"enrollmentId\": 1\r\n                        }\r\n                    ],\r\n                    \"population\": [\r\n                        {\r\n                            \"name\": \"\",\r\n                            \"populationId\": 1\r\n                        }\r\n                    ],\r\n                    \"marketAccess\": [\r\n                        {\r\n                            \"name\": \"\",\r\n                            \"marketAccessId\": 1\r\n                        }\r\n                    ],\r\n                    \"operationalCost\": [\r\n                        {\r\n                            \"name\": \"\",\r\n                            \"operationalCostID\": 1\r\n                        }\r\n                    ]\r\n                }\r\n            ],\r\n            \"numberOfSim\": 10000\r\n        }\r\n    },\r\n    \"createdBy\": \"Testuser1.Solaris@cytel.cloud\",\r\n    \"projectID\": {{ProjID}},\r\n    \"resourceID\": 1\r\n}"
+				},
+				"url": {
+					"raw": "https://{{url}}/api/v1.0/inputadvisor/'Market%20Access'",
+					"protocol": "https",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"inputadvisor",
+						"'Market%20Access'"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IE-OPERATION-COST",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "93eea29e-481f-4fde-873b-292d9bf0f1db",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"tests[\"Body is NOT empty\"] = (responseBody!==null);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{Token}}"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "cyt-api-key",
+						"value": "17f8e37f57304d05b55c9f39871e137c ",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"object\": {\r\n        \"score\": {\r\n            \"error\": [\r\n                {\r\n                    \"field\": \"\",\r\n                    \"message\": \"\"\r\n                }\r\n            ],\r\n            \"power\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            },\r\n            \"sampleSize\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            },\r\n            \"studyDuration\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            },\r\n            \"numberofEvents\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            },\r\n            \"discountedStudyCost\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            }\r\n        },\r\n        \"design\": [\r\n            {\r\n                \"name\": \"Design\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"designId\": 0,\r\n                \"efficacy\": {\r\n                    \"parameter\": \"OF\",\r\n                    \"boundaryFamily\": {\r\n                        \"id\": 1,\r\n                        \"value\": \"Spending Functions\"\r\n                    },\r\n                    \"spendingFunction\": {\r\n                        \"id\": 1,\r\n                        \"value\": \"Lan-DeMets\"\r\n                    }\r\n                },\r\n                \"tailType\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"Left Tail\"\r\n                },\r\n                \"testType\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"1-sided\"\r\n                },\r\n                \"designKey\": \"\",\r\n                \"endpointId\": 1,\r\n                \"hypothesis\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"Superiority\"\r\n                },\r\n                \"sampleSize\": \"182\",\r\n                \"type1Error\": \"0.025\",\r\n                \"nonInfMargin\": \"0.223\",\r\n                \"numberOfArms\": 2,\r\n                \"criticalPoint\": \"\",\r\n                \"numberOfEvents\": \"88\",\r\n                \"testStatistics\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"Logrank\"\r\n                },\r\n                \"allocationRatio\": \"1\",\r\n                \"statisticalDesign\": {\r\n                    \"id\": 2,\r\n                    \"value\": \"Group Sequential\",\r\n                    \"version\": \"1.0.0\"\r\n                },\r\n                \"interimAnalysesSpacing\": [\r\n                    \"50\"\r\n                ],\r\n                \"numberOfInterimAnalysis\": \"1\",\r\n                \"subjectsAreFollowedType\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"Until End of Study\"\r\n                },\r\n                \"regulatoryRiskAssessment\": {\r\n                    \"id\": null,\r\n                    \"value\": \"\"\r\n                },\r\n                \"subjectsAreFollowedPeriod\": \"1\"\r\n            }\r\n        ],\r\n        \"objective\": {\r\n            \"error\": [\r\n                {\r\n                    \"field\": \"\",\r\n                    \"message\": \"\"\r\n                }\r\n            ],\r\n            \"endpoint\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"Name\": \"Endpoint\",\r\n                    \"Type\": \"Time to Event\",\r\n                    \"error\": [\r\n                        {\r\n                            \"field\": \"\",\r\n                            \"message\": \"\"\r\n                        }\r\n                    ],\r\n                    \"Endpoint\": \"Overall Survival\",\r\n                    \"cardOrder\": 1,\r\n                    \"populationName\": \"Target Population\"\r\n                }\r\n            ],\r\n            \"controlArm\": \"Control\",\r\n            \"treatmentArm\": \"Arm\",\r\n            \"populationName\": \"Target Population\"\r\n        },\r\n        \"validated\": true,\r\n        \"enrollment\": [\r\n            {\r\n                \"name\": \"EnrollMent Name\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"sites\": [\r\n                    {\r\n                        \"error\": [\r\n                            {\r\n                                \"field\": \"\",\r\n                                \"message\": \"\"\r\n                            }\r\n                        ],\r\n                        \"order\": 1,\r\n                        \"geography\": {\r\n                            \"id\": 3,\r\n                            \"value\": \"Mexico\"\r\n                        },\r\n                        \"enrollmentCap\": 100,\r\n                        \"siteInitiationTime\": 0,\r\n                        \"avgPatientsEnrolled\": \"9149\"\r\n                    }\r\n                ],\r\n                \"cardOrder\": 1,\r\n                \"inputMethod\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"Accrual Rate\"\r\n                },\r\n                \"distribution\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"Uniform\"\r\n                },\r\n                \"enrollmentId\": 1\r\n            }\r\n        ],\r\n        \"population\": [\r\n            {\r\n                \"name\": \"Population Scenerio Name\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"cardOrder\": 1,\r\n                \"isExpanded\": true,\r\n                \"populationId\": 1,\r\n                \"endpointModel\": [\r\n                    {\r\n                        \"error\": [\r\n                            {\r\n                                \"field\": \"\",\r\n                                \"message\": \"\"\r\n                            }\r\n                        ],\r\n                        \"model\": {\r\n                            \"id\": 1,\r\n                            \"value\": \"Exponential\"\r\n                        },\r\n                        \"inputData\": [\r\n                            {\r\n                                \"byTime\": {\r\n                                    \"value\": \"1\",\r\n                                    \"default\": \"1\"\r\n                                },\r\n                                \"control\": \"20\",\r\n                                \"treatment\": \"\",\r\n                                \"hazardRatio\": \"0.5\",\r\n                                \"startingAtTime\": {\r\n                                    \"value\": \"\",\r\n                                    \"default\": \"0\"\r\n                                }\r\n                            }\r\n                        ],\r\n                        \"endpointId\": 1,\r\n                        \"inputMethod\": {\r\n                            \"id\": 3,\r\n                            \"value\": {\r\n                                \"id\": 3,\r\n                                \"value\": \"Cumulative % Survival\"\r\n                            }\r\n                        },\r\n                        \"numberOfPieces\": 1\r\n                    }\r\n                ],\r\n                \"dropoutRateModel\": {\r\n                    \"error\": [\r\n                        {\r\n                            \"field\": \"\",\r\n                            \"message\": \"\"\r\n                        }\r\n                    ],\r\n                    \"model\": {\r\n                        \"id\": 1,\r\n                        \"value\": \"Exponential\"\r\n                    },\r\n                    \"byTime\": 1,\r\n                    \"control\": \"0\",\r\n                    \"treatment\": \"0\",\r\n                    \"inputMethod\": {\r\n                        \"id\": 1,\r\n                        \"value\": \"Probability of Dropout\"\r\n                    },\r\n                    \"numberOfPieces\": 1\r\n                },\r\n                \"virtualPopulationSize\": \"10000\"\r\n            }\r\n        ],\r\n        \"marketAccess\": [\r\n            {\r\n                \"name\": \"\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"cardOrder\": 1,\r\n                \"endpointId\": 1,\r\n                \"discountRate\": 5,\r\n                \"marketAccessId\": 1,\r\n                \"timeToPatentExpiry\": 9.5,\r\n                \"regulatoryReviewPeriod\": 1,\r\n                \"annualRevenueInPeakYear\": 1000000,\r\n                \"timeToPeakAnnualRevenue\": 5,\r\n                \"proportionOfResidualSales\": 15,\r\n                \"anticipatedTreatmentEffect\": 0.6,\r\n                \"timeFromPatentExpirytoCloseOut\": 2\r\n            }\r\n        ],\r\n        \"operationalCost\": [\r\n            {\r\n                \"name\": \"Operation Model Name\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"cardOrder\": 1,\r\n                \"operationalCostID\": null,\r\n                \"avgInvestigatorGrantPerPatient\": \"4545487\"\r\n            }\r\n        ],\r\n        \"simulationModels\": {\r\n            \"seed\": 0,\r\n            \"error\": [\r\n                {\r\n                    \"field\": \"\",\r\n                    \"message\": \"\"\r\n                }\r\n            ],\r\n            \"models\": [\r\n                {\r\n                    \"name\": \"\",\r\n                    \"error\": [\r\n                        {\r\n                            \"field\": \"\",\r\n                            \"message\": \"\"\r\n                        }\r\n                    ],\r\n                    \"design\": [\r\n                        {}\r\n                    ],\r\n                    \"modelId\": 1,\r\n                    \"enrollment\": [\r\n                        {\r\n                            \"name\": \"\",\r\n                            \"enrollmentId\": 1\r\n                        }\r\n                    ],\r\n                    \"population\": [\r\n                        {\r\n                            \"name\": \"\",\r\n                            \"populationId\": 1\r\n                        }\r\n                    ],\r\n                    \"marketAccess\": [\r\n                        {\r\n                            \"name\": \"\",\r\n                            \"marketAccessId\": 1\r\n                        }\r\n                    ],\r\n                    \"operationalCost\": [\r\n                        {\r\n                            \"name\": \"\",\r\n                            \"operationalCostID\": 1\r\n                        }\r\n                    ]\r\n                }\r\n            ],\r\n            \"numberOfSim\": 10000\r\n        }\r\n    },\r\n    \"createdBy\": \"Testuser1.Solaris@cytel.cloud\",\r\n    \"projectID\": {{ProjID}},\r\n    \"resourceID\": 1\r\n}"
+				},
+				"url": {
+					"raw": "https://{{url}}/api/v1.0/inputadvisor/'operational-costs'",
+					"protocol": "https",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"inputadvisor",
+						"'operational-costs'"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IE- SIMULATION MODEL",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "507db346-6032-442c-80bb-1cdfe60b8381",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"tests[\"Body is NOT empty\"] = (responseBody!==null);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "cyt-api-key",
+						"value": "17f8e37f57304d05b55c9f39871e137c ",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"object\": {\r\n        \"score\": {\r\n            \"error\": [\r\n                {\r\n                    \"field\": \"\",\r\n                    \"message\": \"\"\r\n                }\r\n            ],\r\n            \"power\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            },\r\n            \"sampleSize\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            },\r\n            \"studyDuration\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            },\r\n            \"numberofEvents\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            },\r\n            \"discountedStudyCost\": {\r\n                \"max\": null,\r\n                \"min\": null,\r\n                \"select\": true,\r\n                \"weight\": 20\r\n            }\r\n        },\r\n        \"design\": [\r\n            {\r\n                \"name\": \"Design\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"designId\": 0,\r\n                \"efficacy\": {\r\n                    \"parameter\": \"OF\",\r\n                    \"boundaryFamily\": {\r\n                        \"id\": 1,\r\n                        \"value\": \"Spending Functions\"\r\n                    },\r\n                    \"spendingFunction\": {\r\n                        \"id\": 1,\r\n                        \"value\": \"Lan-DeMets\"\r\n                    }\r\n                },\r\n                \"tailType\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"Left Tail\"\r\n                },\r\n                \"testType\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"1-sided\"\r\n                },\r\n                \"designKey\": \"\",\r\n                \"endpointId\": 1,\r\n                \"hypothesis\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"Superiority\"\r\n                },\r\n                \"sampleSize\": \"182\",\r\n                \"type1Error\": \"0.025\",\r\n                \"nonInfMargin\": \"0.223\",\r\n                \"numberOfArms\": 2,\r\n                \"criticalPoint\": \"\",\r\n                \"numberOfEvents\": \"88\",\r\n                \"testStatistics\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"Logrank\"\r\n                },\r\n                \"allocationRatio\": \"1\",\r\n                \"statisticalDesign\": {\r\n                    \"id\": 2,\r\n                    \"value\": \"Group Sequential\",\r\n                    \"version\": \"1.0.0\"\r\n                },\r\n                \"interimAnalysesSpacing\": [\r\n                    \"50\"\r\n                ],\r\n                \"numberOfInterimAnalysis\": \"1\",\r\n                \"subjectsAreFollowedType\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"Until End of Study\"\r\n                },\r\n                \"regulatoryRiskAssessment\": {\r\n                    \"id\": null,\r\n                    \"value\": \"\"\r\n                },\r\n                \"subjectsAreFollowedPeriod\": \"1\"\r\n            }\r\n        ],\r\n        \"objective\": {\r\n            \"error\": [\r\n                {\r\n                    \"field\": \"\",\r\n                    \"message\": \"\"\r\n                }\r\n            ],\r\n            \"endpoint\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"Name\": \"Endpoint\",\r\n                    \"Type\": \"Time to Event\",\r\n                    \"error\": [\r\n                        {\r\n                            \"field\": \"\",\r\n                            \"message\": \"\"\r\n                        }\r\n                    ],\r\n                    \"Endpoint\": \"Overall Survival\",\r\n                    \"cardOrder\": 1,\r\n                    \"populationName\": \"Target Population\"\r\n                }\r\n            ],\r\n            \"controlArm\": \"Control\",\r\n            \"treatmentArm\": \"Arm\",\r\n            \"populationName\": \"Target Population\"\r\n        },\r\n        \"validated\": true,\r\n        \"enrollment\": [\r\n            {\r\n                \"name\": \"EnrollMent Name\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"sites\": [\r\n                    {\r\n                        \"error\": [\r\n                            {\r\n                                \"field\": \"\",\r\n                                \"message\": \"\"\r\n                            }\r\n                        ],\r\n                        \"order\": 1,\r\n                        \"geography\": {\r\n                            \"id\": 3,\r\n                            \"value\": \"Mexico\"\r\n                        },\r\n                        \"enrollmentCap\": 100,\r\n                        \"siteInitiationTime\": 0,\r\n                        \"avgPatientsEnrolled\": \"9149\"\r\n                    }\r\n                ],\r\n                \"cardOrder\": 1,\r\n                \"inputMethod\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"Accrual Rate\"\r\n                },\r\n                \"distribution\": {\r\n                    \"id\": 1,\r\n                    \"value\": \"Uniform\"\r\n                },\r\n                \"enrollmentId\": 1\r\n            }\r\n        ],\r\n        \"population\": [\r\n            {\r\n                \"name\": \"Population Scenerio Name\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"cardOrder\": 1,\r\n                \"isExpanded\": true,\r\n                \"populationId\": 1,\r\n                \"endpointModel\": [\r\n                    {\r\n                        \"error\": [\r\n                            {\r\n                                \"field\": \"\",\r\n                                \"message\": \"\"\r\n                            }\r\n                        ],\r\n                        \"model\": {\r\n                            \"id\": 1,\r\n                            \"value\": \"Exponential\"\r\n                        },\r\n                        \"inputData\": [\r\n                            {\r\n                                \"byTime\": {\r\n                                    \"value\": \"1\",\r\n                                    \"default\": \"1\"\r\n                                },\r\n                                \"control\": \"20\",\r\n                                \"treatment\": \"\",\r\n                                \"hazardRatio\": \"0.5\",\r\n                                \"startingAtTime\": {\r\n                                    \"value\": \"\",\r\n                                    \"default\": \"0\"\r\n                                }\r\n                            }\r\n                        ],\r\n                        \"endpointId\": 1,\r\n                        \"inputMethod\": {\r\n                            \"id\": 3,\r\n                            \"value\": {\r\n                                \"id\": 3,\r\n                                \"value\": \"Cumulative % Survival\"\r\n                            }\r\n                        },\r\n                        \"numberOfPieces\": 1\r\n                    }\r\n                ],\r\n                \"dropoutRateModel\": {\r\n                    \"error\": [\r\n                        {\r\n                            \"field\": \"\",\r\n                            \"message\": \"\"\r\n                        }\r\n                    ],\r\n                    \"model\": {\r\n                        \"id\": 1,\r\n                        \"value\": \"Exponential\"\r\n                    },\r\n                    \"byTime\": 1,\r\n                    \"control\": \"0\",\r\n                    \"treatment\": \"0\",\r\n                    \"inputMethod\": {\r\n                        \"id\": 1,\r\n                        \"value\": \"Probability of Dropout\"\r\n                    },\r\n                    \"numberOfPieces\": 1\r\n                },\r\n                \"virtualPopulationSize\": \"10000\"\r\n            }\r\n        ],\r\n        \"marketAccess\": [\r\n            {\r\n                \"name\": \"Market Access\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"cardOrder\": 1,\r\n                \"endpointId\": 1,\r\n                \"discountRate\": 5,\r\n                \"marketAccessId\": 1,\r\n                \"timeToPatentExpiry\": 9.5,\r\n                \"regulatoryReviewPeriod\": 1,\r\n                \"annualRevenueInPeakYear\": \"1000000\",\r\n                \"timeToPeakAnnualRevenue\": 5,\r\n                \"proportionOfResidualSales\": 15,\r\n                \"anticipatedTreatmentEffect\": 0.6,\r\n                \"timeFromPatentExpirytoCloseOut\": 2\r\n            }\r\n        ],\r\n        \"operationalCost\": [\r\n            {\r\n                \"name\": \"Operation Model Name\",\r\n                \"error\": [\r\n                    {\r\n                        \"field\": \"\",\r\n                        \"message\": \"\"\r\n                    }\r\n                ],\r\n                \"cardOrder\": 1,\r\n                \"operationalCostID\": null,\r\n                \"avgInvestigatorGrantPerPatient\": \"4545487\"\r\n            }\r\n        ],\r\n        \"simulationModels\": {\r\n            \"seed\": 0,\r\n            \"error\": [\r\n                {\r\n                    \"field\": \"\",\r\n                    \"message\": \"\"\r\n                }\r\n            ],\r\n            \"models\": [\r\n                {\r\n                    \"name\": \"SimulationModel\",\r\n                    \"error\": [\r\n                        {\r\n                            \"field\": \"\",\r\n                            \"message\": \"\"\r\n                        }\r\n                    ],\r\n                    \"design\": [\r\n                        {\r\n                            \"name\": \"Design\",\r\n                            \"designId\": 0\r\n                        }\r\n                    ],\r\n                    \"modelId\": 1,\r\n                    \"enrollment\": [\r\n                        {\r\n                            \"name\": \"EnrollMent Name\",\r\n                            \"enrollmentId\": 1\r\n                        }\r\n                    ],\r\n                    \"population\": [\r\n                        {\r\n                            \"name\": \"Population Scenerio Name\",\r\n                            \"populationId\": 1\r\n                        }\r\n                    ],\r\n                    \"marketAccess\": [\r\n                        {\r\n                            \"name\": \"Market Access\",\r\n                            \"marketAccessId\": 1\r\n                        }\r\n                    ],\r\n                    \"operationalCost\": [\r\n                        {\r\n                            \"name\": \"Operation Model Name\",\r\n                            \"operationalCostID\": 1\r\n                        }\r\n                    ]\r\n                }\r\n            ],\r\n            \"numberOfSim\": 10000\r\n        }\r\n    },\r\n    \"createdBy\": \"Testuser1.Solaris@cytel.cloud\",\r\n    \"projectID\": {{ProjID}},\r\n    \"resourceID\": 1\r\n}"
+				},
+				"url": {
+					"raw": "https://{{url}}/api/v1.0/inputadvisor/'simulation-models'",
+					"protocol": "https",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"inputadvisor",
+						"'simulation-models'"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Geographies",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "cyt-api-key",
+						"value": "17f8e37f57304d05b55c9f39871e137c",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{url}}/api/v1.0/geographies",
+					"protocol": "https",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"geographies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IE-ProjectDetails",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "eb5d58f2-7acc-4ced-8d11-dabff9f6e057",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"tests[\"Body is NOT empty\"] = (responseBody!==null);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "cyt-api-key",
+						"value": "17f8e37f57304d05b55c9f39871e137c",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{url}}/api/v1.0/inputadvisor/{{resourceID}}/{{ProjID}}",
+					"protocol": "https",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"inputadvisor",
+						"{{resourceID}}",
+						"{{ProjID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Programs",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "be6b084d-2941-4f5e-927f-0f8b86843fae",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"tests[\"Body is NOT empty\"] = (responseBody!==null);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "cyt-api-key",
+						"value": "17f8e37f57304d05b55c9f39871e137c",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://projectmanager-api-qa-cyt-solaris-eastus.azurewebsites.net/api/v1.0/programs/{{resourceID}}",
+					"protocol": "https",
+					"host": [
+						"projectmanager-api-qa-cyt-solaris-eastus",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"programs",
+						"{{resourceID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Programs",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b4b636ea-1600-420c-b01a-8b4a54ea59f9",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"tests[\"Body is NOT empty\"] = (responseBody!==null);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "cyt-api-key",
+						"value": "17f8e37f57304d05b55c9f39871e137c",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"programName\": \"Prog1{{$guid}}\",\r\n  \"resourceID\": {{resourceID}},\r\n    \"createdBy\": \"Testuser1.Solaris@cytel.cloud\",\r\n}"
+				},
+				"url": {
+					"raw": "https://{{url}}/api/v1.0/programs",
+					"protocol": "https",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"programs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Project Status / Edit / View",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9f1e2477-2f50-440e-9759-b3d3895d95b4",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"tests[\"Body is NOT empty\"] = (responseBody!==null);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Token}}",
+						"type": "text"
+					},
+					{
+						"key": "cyt-api-key",
+						"value": "17f8e37f57304d05b55c9f39871e137c",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{url}}/api/v1.0/statuses",
+					"protocol": "https",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"statuses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Currencies API",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "fc1a75bf-08a0-46a9-b1d1-3b41b42afa3b",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"tests[\"Body is NOT empty\"] = (responseBody!==null);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Token}}",
+						"type": "text"
+					},
+					{
+						"key": "cyt-api-key",
+						"value": "17f8e37f57304d05b55c9f39871e137c",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{url}}/api/v1.0/currencies",
+					"protocol": "https",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"currencies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Endpoints",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "41e0d0af-dd65-4ffe-9cb4-ddc294209d11",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"tests[\"Body is NOT empty\"] = (responseBody!==null);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Token}}",
+						"type": "text"
+					},
+					{
+						"key": "cyt-api-key",
+						"value": "17f8e37f57304d05b55c9f39871e137c",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{url}}/api/v1.0/endpoints",
+					"protocol": "https",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"endpoints"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "accessToken",
+				"value": "{{Token}}",
+				"type": "string"
+			},
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "82981935-34d4-4f85-82e1-7087fd50e471",
+				"type": "text/javascript",
+				"exec": [
+					"var number = Math.floor(Math.random() * 1000);",
+					"",
+					"var projectName = 'TestProject-' + number;",
+					"pm.environment.set(\"projectName\", projectName);",
+					"",
+					"var protID = 'ProtID' + number;",
+					"pm.environment.set(\"protocolID\", protID);",
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "4613e924-d94b-46e6-ae3b-d2bd0aec700a",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "cc213864-e51f-4ef7-a546-d6ee8248d86c",
+			"key": "url",
+			"value": ""
+		}
+	],
+	"protocolProfileBehavior": {}
+}
