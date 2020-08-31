@@ -1,0 +1,509 @@
+{
+	"info": {
+		"_postman_id": "b4f6030e-b877-4a44-a328-67c93b501e17",
+		"name": "Simulation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "TokenGeneration",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "a82d11f6-b89b-45a5-bde6-c1c77382da0d",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "70098226-0f8f-4907-ac8e-fff73df62992",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"tests[\"Body is NOT empty\"] = (responseBody!==null);\r",
+							"\r",
+							"var jsondata=JSON.parse(responseBody);\r",
+							"//let responseData=pm.response.json();\r",
+							"//pm.environment.set(\"ProjID\", responseData.id);\r",
+							"postman.setEnvironmentVariable(\"Token\", jsondata.access_token);\r",
+							"console.log(postman.setEnvironmentVariable(\"Token\", jsondata.access_token));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "fd43dcbc-07f9-445d-a110-1f600a0634a9",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "koVHs4yh9DaG1.cbD3tC1zL1.3-uB.j_~i",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "fd43dcbc-07f9-445d-a110-1f600a0634a9/Files.Read",
+							"type": "text"
+						},
+						{
+							"key": "userName",
+							"value": "Testuser1.Solaris@cytel.cloud",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "Xulu94632",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://login.microsoftonline.com/5043366b-6dbc-4ed5-97e9-a6a6e7d05ca0/oauth2/v2.0/token",
+					"protocol": "https",
+					"host": [
+						"login",
+						"microsoftonline",
+						"com"
+					],
+					"path": [
+						"5043366b-6dbc-4ed5-97e9-a6a6e7d05ca0",
+						"oauth2",
+						"v2.0",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Projects",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "455d69f9-ed9c-4499-8c70-3c66870f844f",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"tests[\"Body is NOT empty\"] = (responseBody!==null);\r",
+							"\r",
+							"var jsondata=JSON.parse(responseBody);\r",
+							"//let responseData=pm.response.json();\r",
+							"//pm.environment.set(\"ProjID\", responseData.id);\r",
+							"postman.setEnvironmentVariable(\"ProjID\", jsondata.id);\r",
+							"postman.setEnvironmentVariable(\"ProjID\", jsondata.resourceID);\r",
+							"console.log(postman.setEnvironmentVariable(\"ProjID\", jsondata.id));"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "53077cff-0e43-4b34-84f4-a433f1157e86",
+						"exec": [
+							"/** const projname =Math.floor((Math.random() * 100) + 1);\r",
+							"pm.globals.set(\"projectName\",projname)\r",
+							"const protid =Math.floor((Math.random() * 100) + 1);\r",
+							"pm.globals.set(\"protocolID\",protid) */\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Token}}",
+						"type": "text"
+					},
+					{
+						"key": "cyt-api-key",
+						"value": "17f8e37f57304d05b55c9f39871e137c",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"projectName\": \"{{projectName}}\",\r\n    \"protocolID\": \"{{protocolID}}\",\r\n    \"programID\": 16,\r\n    \"indicationID\": 2,\r\n    \"phase\": 3,\r\n    \"timeUnitID\": 4,\r\n    \"currencyID\": 1,\r\n    \"createdBy\": \"Testuser1.Solaris@cytel.cloud\",\r\n    \"resourceID\": 1\r\n}"
+				},
+				"url": {
+					"raw": "https://dev-apis.cytel.com/solara-projectmgr-test/v1/api/v1.0/projects",
+					"protocol": "https",
+					"host": [
+						"dev-apis",
+						"cytel",
+						"com"
+					],
+					"path": [
+						"solara-projectmgr-test",
+						"v1",
+						"api",
+						"v1.0",
+						"projects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Project Status / Edit / View",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "bb78d302-b75b-4654-b88e-d386fc2d1d5a",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"tests[\"Body is NOT empty\"] = (responseBody!==null);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Imh1Tjk1SXZQZmVocTM0R3pCRFoxR1hHaXJuTSIsImtpZCI6Imh1Tjk1SXZQZmVocTM0R3pCRFoxR1hHaXJuTSJ9.eyJhdWQiOiJmZDQzZGNiYy0wN2Y5LTQ0NWQtYTExMC0xZjYwMGEwNjM0YTkiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC81MDQzMzY2Yi02ZGJjLTRlZDUtOTdlOS1hNmE2ZTdkMDVjYTAvIiwiaWF0IjoxNTk3NDE4OTU4LCJuYmYiOjE1OTc0MTg5NTgsImV4cCI6MTU5NzQyMjg1OCwiYWlvIjoiRTJCZ1lCRDNESnV3NVFWemVnR0QzQkZ6Ymc2Sjh4dk9DeFd2T1JQeEkyVEJLMFd4dm9jQSIsImFtciI6WyJwd2QiXSwiZmFtaWx5X25hbWUiOiJTb2xhcmlzIiwiZ2l2ZW5fbmFtZSI6IlRlc3R1c2VyMSIsImlwYWRkciI6IjE0LjE0My4xMjYuOTAiLCJuYW1lIjoiVGVzdHVzZXIxIFNvbGFyaXMiLCJub25jZSI6IjgyMGIzZjI2LWIyMDQtNDY2Ni04NGQzLTY2NTk5OWNlN2NhNSIsIm9pZCI6IjY4ZTI5NjA2LTgxM2MtNGFjYS05MDJhLTBlYzkyNjFkZTBlZiIsInJoIjoiMC5BVFVBYXpaRFVMeHQxVTZYNmFhbTU5QmNvTHpjUV8zNUIxMUVvUkFmWUFvR05LazFBQ1kuIiwic3ViIjoiWXFSSWRiT05nVEJOenZxeGN4R2NhR0toNDRNUmxsSVNiNXVxb3ZidmVXcyIsInRpZCI6IjUwNDMzNjZiLTZkYmMtNGVkNS05N2U5LWE2YTZlN2QwNWNhMCIsInVuaXF1ZV9uYW1lIjoiVGVzdHVzZXIxLlNvbGFyaXNAY3l0ZWwuY2xvdWQiLCJ1cG4iOiJUZXN0dXNlcjEuU29sYXJpc0BjeXRlbC5jbG91ZCIsInV0aSI6IjFBTGRLTzBpYUVhUmJrTWVNOThrQUEiLCJ2ZXIiOiIxLjAifQ.Qgsm4mDSvJmSL3EldQ-AJg001Q6ZcmHFIbM-dLeBmkkV8LGQgA5jTA9yLQRoIjEr3z0LynJ1j2CN9Y5hc1n18FQunZlAGnYTEVOscPohZZffV-gPQKQTRyNtQRjQSGq5eAdo6Tqk6I6IQKyWVMPhe1H-Y3OKg62P3-IOb4buzVsNSE1MCUefN7P67zPUdoWM7EhPkeXC5Xsil-0wfDcuqTSrTBqVHtH3JafvHCW8PODC6Raekj-lJQO9uJjmlgJt9F3w4F1DsrVj8NiJpKX_TBIpnF2DXOvbuCrXnuhlE20mVt0d5kXbNnwy8r8SBm2Kv6Tur9e-F2MQCpe9ysn8nA",
+						"type": "text"
+					},
+					{
+						"key": "cyt-api-key",
+						"value": "17f8e37f57304d05b55c9f39871e137c",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{url}}/api/v1.0/statuses",
+					"protocol": "https",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"statuses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Simulation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0f33f6e3-cd04-464c-a652-f6b06fc07b36",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"tests[\"Body is NOT empty\"] = (responseBody!==null);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				},
+				"followAuthorizationHeader": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "cyt-api-key",
+						"type": "text",
+						"value": "17f8e37f57304d05b55c9f39871e137c"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"projectId\": {{ProjID}},\r\n    \"requiredCredits\": 100,\r\n    \"resourceId\": {{resourceID}},\r\n    \"createdBy\": \"test user\"\r\n\r\n}"
+				},
+				"url": {
+					"raw": "https://{{url}}/api/v1.0/simulation",
+					"protocol": "https",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"simulation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Simulation count",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d27fbab5-8bfd-4270-8dbe-135ef19eed91",
+						"exec": [
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"tests[\"Body is NOT empty\"] = (responseBody!==null);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{Token}}"
+					},
+					{
+						"key": "cyt-api-key",
+						"type": "text",
+						"value": "17f8e37f57304d05b55c9f39871e137c"
+					}
+				],
+				"url": {
+					"raw": "https://{{url}}/api/v1.0/simulation/modelcount/{{resourceID}}/{{ProjID}}",
+					"protocol": "https",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"simulation",
+						"modelcount",
+						"{{resourceID}}",
+						"{{ProjID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Simulation Progress",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3f757fc2-c552-4fdb-ab76-c302ac831c7c",
+						"exec": [
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"tests[\"Body is NOT empty\"] = (responseBody!==null);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{Token}}"
+					},
+					{
+						"key": "cyt-api-key",
+						"type": "text",
+						"value": "17f8e37f57304d05b55c9f39871e137c"
+					}
+				],
+				"url": {
+					"raw": "https://{{url}}/api/v1.0/simulation/progress/{{ProjID}}",
+					"protocol": "https",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"simulation",
+						"progress",
+						"{{ProjID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Simulation Credits Details",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "709b4ab6-5010-430d-9d9f-df62306eb982",
+						"exec": [
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"tests[\"Body is NOT empty\"] = (responseBody!==null);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{Token}}"
+					},
+					{
+						"key": "cyt-api-key",
+						"type": "text",
+						"value": "17f8e37f57304d05b55c9f39871e137c"
+					}
+				],
+				"url": {
+					"raw": "https://{{url}}/api/v1.0/creditusage/{{resourceID}}",
+					"protocol": "https",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1.0",
+						"creditusage",
+						"{{resourceID}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{Token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "c18bd519-40b8-48e4-9f78-af249d153465",
+				"type": "text/javascript",
+				"exec": [
+					"var number = Math.floor(Math.random() * 1000);",
+					"",
+					"var projectName = 'TestProject-' + number;",
+					"pm.environment.set(\"projectName\", projectName);",
+					"",
+					"var protID = 'ProtID' + number;",
+					"pm.environment.set(\"protocolID\", protID);",
+					"",
+					"",
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "19ceeda3-0966-43f8-b47c-5b5cf70da019",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
